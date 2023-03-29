@@ -1,7 +1,7 @@
 // bank-page\src\App.js
 import { useContext } from 'react';
 import Home from './pages/Home';
-import { pagesMapping, RoutingContext } from './context/Routing';
+import { pagesMapping, RoutingContext } from './shared/context/Routing';
 import MainNavigation from './shared/components/Navigation/MainNavigation';
 
 function App() {
