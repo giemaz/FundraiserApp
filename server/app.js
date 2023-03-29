@@ -16,6 +16,7 @@ const { router: donationRoutes } = require('./utils/donationRoutes');
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(authRoutes);
+app.use(adminRoutes);
 app.use(storiesRoutes);
 app.use(donationRoutes);
 
