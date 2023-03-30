@@ -1,30 +1,25 @@
-// bank-page\src\components\Navigation\Navigation.jsx
-import React, { useContext, useEffect, useState } from 'react';
+// client\src\shared\components\Navigation\Links.jsx
+import React, { useContext } from 'react';
 import { pagesMapping, RoutingContext } from '../../context/Routing';
-import { useAuth } from '../../context/AuthContext';
+import { AuthContext } from '../../context/auth-context';
 import classes from './Links.module.css';
 
 function Links() {
 	const { setPage, page } = useContext(RoutingContext);
-	const { isAuthenticated, logout } = useAuth();
-	const [isUserAuthenticated, setIsUserAuthenticated] = useState(isAuthenticated());
-
-	useEffect(() => {
-		setIsUserAuthenticated(isAuthenticated());
-	}, [isAuthenticated]);
+	const { isLoggedIn, logout } = useContext(AuthContext);
 
 	const handleNavigation = (p) => {
-		if (p === pagesMapping.accounts && !isUserAuthenticated) {
+		console.log('Navigating to page:', p);
+		if (p === pagesMapping.accounts && !isLoggedIn) {
 			setPage(pagesMapping.auth);
 		} else {
 			setPage(p);
 		}
 	};
 
-	const handleLogout = async () => {
-		await logout();
+	const handleLogout = () => {
+		logout();
 		setPage(pagesMapping.auth);
-		setIsUserAuthenticated(isAuthenticated());
 	};
 
 	return (
@@ -35,13 +30,13 @@ function Links() {
 						<button
 							key={p}
 							className={page === p ? classes.active : ''}
-							onClick={isUserAuthenticated ? handleLogout : () => setPage(p)}>
-							{isUserAuthenticated ? 'Logout' : p}
+							onClick={isLoggedIn ? handleLogout : () => setPage(p)}>
+							{isLoggedIn ? 'Logout' : p}
 						</button>
 					);
 				} else if (p === pagesMapping.accounts) {
 					return (
-						isUserAuthenticated && (
+						isLoggedIn && (
 							<button
 								key={p}
 								className={page === p ? classes.active : ''}

@@ -5,6 +5,7 @@ export const pagesMapping = {
 	home: 'Home',
 	create: 'Create',
 	admin: 'Admin',
+	auth: 'Auth',
 };
 
 export const RoutingContext = React.createContext({ page: pagesMapping.home });
