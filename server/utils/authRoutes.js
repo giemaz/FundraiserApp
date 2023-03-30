@@ -5,12 +5,13 @@ const jwt = require('jsonwebtoken');
 const { authenticateJWT } = require('./middleware');
 const connection = require('../db');
 const router = express.Router();
-
+const { upload } = require('./multerConfig');
 const SALT_ROUNDS = 10;
 const JWT_SECRET = 'your-jwt-secret';
 
 // POST /register
-router.post('/register', (req, res) => {
+router.post('/register', upload.single('image'), (req, res) => {
+	console.log('Received request body:', req.body);
 	const { email, username, password } = req.body;
 	if (!email || !username || !password) {
 		res.status(400).send('Invalid request');

@@ -68,10 +68,10 @@ const Auth = () => {
 				const responseData = await sendRequest(
 					'http://localhost:3003/login',
 					'POST',
-					JSON.stringify({
+					{
 						email: formState.inputs.email.value,
 						password: formState.inputs.password.value,
-					}),
+					},
 					{
 						'Content-Type': 'application/json',
 					}
@@ -85,7 +85,7 @@ const Auth = () => {
 				formData.append('username', formState.inputs.username.value);
 				formData.append('password', formState.inputs.password.value);
 				formData.append('image', formState.inputs.image.value);
-				const responseData = await sendRequest('http://localhost:3003/register', 'POST', formData);
+				const responseData = await sendRequest('http://localhost:3003/register', 'POST', formData, {}, true);
 
 				auth.login(responseData.userId, responseData.token);
 			} catch (err) {}
