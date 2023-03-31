@@ -103,7 +103,7 @@ router.post('/login', (req, res) => {
 				}
 			);
 
-			res.status(200).json({ userId: user.id, token: token });
+			res.status(200).json({ userId: user.id, token: token, userType: user.user_type });
 		});
 	});
 });

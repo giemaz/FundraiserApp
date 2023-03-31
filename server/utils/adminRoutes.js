@@ -1,3 +1,4 @@
+// server\utils\adminRoutes.js
 const express = require('express');
 const { authenticateJWT } = require('./middleware');
 const connection = require('../db');

@@ -75,7 +75,7 @@ const Auth = () => {
 						'Content-Type': 'application/json',
 					}
 				);
-				auth.login(responseData.userId, responseData.token);
+				auth.login(responseData.userId, responseData.token, responseData.userType);
 			} catch (err) {}
 		} else {
 			try {
@@ -86,7 +86,7 @@ const Auth = () => {
 				formData.append('image', formState.inputs.image.value);
 				const responseData = await sendRequest('http://localhost:3003/register', 'POST', formData, {}, true);
 
-				auth.login(responseData.userId, responseData.token);
+				auth.login(responseData.userId, responseData.token, responseData.userType);
 			} catch (err) {}
 		}
 	};

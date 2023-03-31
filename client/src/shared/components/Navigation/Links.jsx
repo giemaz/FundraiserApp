@@ -23,9 +23,9 @@ const Links = (props) => {
 					<NavLink to='/auth'>Auth</NavLink>
 				</li>
 			)}
-			{auth.isLoggedIn && (
+			{auth.isLoggedIn && auth.userType === 'admin' && (
 				<li>
-					<NavLink to={`/${auth.userId}/admin`}>Admin</NavLink>
+					<NavLink to='/admin'>Admin</NavLink>
 				</li>
 			)}
 			{auth.isLoggedIn && (
