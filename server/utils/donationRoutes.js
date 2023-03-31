@@ -10,7 +10,7 @@ router.get('/stories/:story_id/donations', (req, res) => {
 	connection.query('SELECT * FROM donations WHERE story_id = ?', [story_id], (err, results) => {
 		if (err) {
 			console.error(err);
-			res.status(500).send('Server error');
+			res.status(500).json({ message: 'Server error' });
 			return;
 		}
 
@@ -24,7 +24,7 @@ router.post('/stories/:story_id/donations', (req, res) => {
 	const { donor_name, donation_amount } = req.body;
 
 	if (!donor_name || !donation_amount) {
-		res.status(400).send('Invalid request');
+		res.status(400).json({ message: 'Invalid request' });
 		return;
 	}
 
@@ -32,7 +32,7 @@ router.post('/stories/:story_id/donations', (req, res) => {
 	connection.query('INSERT INTO donations SET ?', newDonation, (err, results) => {
 		if (err) {
 			console.error(err);
-			res.status(500).send('Server error');
+			res.status(500).json({ message: 'Server error!' });
 			return;
 		}
 

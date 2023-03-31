@@ -13,7 +13,7 @@ module.exports = (authenticateJWT) => {
 		connection.query('SELECT * FROM stories WHERE is_approved = TRUE', (err, results) => {
 			if (err) {
 				console.error(err);
-				res.status(500).send('Server error');
+				res.status(500).json({ message: 'Server Error!' });
 				return;
 			}
 
@@ -26,7 +26,7 @@ module.exports = (authenticateJWT) => {
 		const { title, description, goal_amount } = req.body;
 		const user_id = req.user.userId;
 		if (!title || !description || !goal_amount || !user_id) {
-			res.status(400).send('Invalid request');
+			res.status(400).json({ message: 'Invalid request!' });
 			return;
 		}
 
@@ -46,7 +46,7 @@ module.exports = (authenticateJWT) => {
 			console.error('Error details: ', err);
 			if (err) {
 				console.error(err);
-				res.status(500).send('Server error');
+				res.status(500).json({ message: 'Server Error!' });
 				return;
 			}
 
@@ -63,12 +63,12 @@ module.exports = (authenticateJWT) => {
 		connection.query('SELECT * FROM stories WHERE id = ?', [id], (err, results) => {
 			if (err) {
 				console.error(err);
-				res.status(500).send('Server error');
+				res.status(500).json({ message: 'Server Error!' });
 				return;
 			}
 
 			if (results.length === 0) {
-				res.status(404).send('Story not found');
+				res.status(404).json({ message: 'Story not found' });
 				return;
 			}
 
@@ -82,12 +82,12 @@ module.exports = (authenticateJWT) => {
 				(err, results) => {
 					if (err) {
 						console.error(err);
-						res.status(500).send('Server error');
+						res.status(500).json({ message: 'Server Error!' });
 						return;
 					}
 
 					if (results.affectedRows === 0) {
-						res.status(404).send('Story not found');
+						res.status(404).json({ message: 'Story not found' });
 						return;
 					}
 
@@ -110,84 +110,39 @@ module.exports = (authenticateJWT) => {
 		});
 	});
 
-	// DELETE /stories/:id
-	router.delete('/stories/:id', authenticateJWT, (req, res) => {
-		const storyId = req.params.id;
-
-		connection.query('SELECT * FROM stories WHERE id = ?', [storyId], (err, results) => {
-			if (err) {
-				console.error(err);
-				res.status(500).send('Server error');
-				return;
-			}
-
-			if (results.length === 0) {
-				res.status(404).send('Story not found');
-				return;
-			}
-
-			connection.query('DELETE FROM donations WHERE story_id = ?', [storyId], (err, results) => {
-				if (err) {
-					console.error(err);
-					res.status(500).send('Server error');
-					return;
-				}
-
-				const storyToDelete = results[0];
-				const imageToDelete = storyToDelete.image_url;
-
-				connection.query('DELETE FROM stories WHERE id = ?', [storyId], (err, results) => {
-					if (err) {
-						console.error(err);
-						res.status(500).send('Server error');
-						return;
-					}
-
-					if (imageToDelete) {
-						fs.unlink(imageToDelete, (err) => {
-							if (err) console.error(err);
-						});
-					}
-
-					res.status(200).send('Story and associated donations deleted successfully');
-				});
-			});
-		});
-	});
-
 	// PUT /stories/:id/block
-	router.put('/stories/:id/block', authenticateJWT, (req, res) => {
-		const accountId = req.params.id;
+	// router.put('/stories/:id/block', authenticateJWT, (req, res) => {
+	// 	const accountId = req.params.id;
 
-		connection.query('SELECT * FROM stories WHERE id = ?', [accountId], (err, results) => {
-			if (err) {
-				console.error(err);
-				res.status(500).send('Server error');
-				return;
-			}
+	// 	connection.query('SELECT * FROM stories WHERE id = ?', [accountId], (err, results) => {
+	// 		if (err) {
+	// 			console.error(err);
+	// 			res.status(500).send('Server error');
+	// 			return;
+	// 		}
 
-			if (results.length === 0) {
-				res.status(404).send('Account not found');
-				return;
-			}
+	// 		if (results.length === 0) {
+	// 			res.status(404).send('Account not found');
+	// 			return;
+	// 		}
 
-			const account = results[0];
+	// 		const account = results[0];
 
-			connection.query(
-				'UPDATE stories SET blocked = ? WHERE id = ?',
-				[!account.blocked, accountId],
-				(err, results) => {
-					if (err) {
-						console.error(err);
-						res.status(500).send('Server error');
-						return;
-					}
+	// 		connection.query(
+	// 			'UPDATE stories SET blocked = ? WHERE id = ?',
+	// 			[!account.blocked, accountId],
+	// 			(err, results) => {
+	// 				if (err) {
+	// 					console.error(err);
+	// 					res.status(500).send('Server error');
+	// 					return;
+	// 				}
 
-					res.status(200).send(`Account ${!account.blocked ? 'blocked' : 'unblocked'} successfully`);
-				}
-			);
-		});
-	});
+	// 				res.status(200).send(`Account ${!account.blocked ? 'blocked' : 'unblocked'} successfully`);
+	// 			}
+	// 		);
+	// 	});
+	// });
 
 	return router;
 };

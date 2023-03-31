@@ -17,7 +17,6 @@ const Admin = () => {
 				const responseData = await sendRequest(`http://localhost:3003/stories/unapproved`, 'GET', null, {
 					Authorization: 'Bearer ' + auth.token,
 				});
-				console.log(responseData);
 				setLoadedStories(responseData);
 			} catch (err) {}
 		};

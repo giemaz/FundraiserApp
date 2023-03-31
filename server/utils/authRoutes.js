@@ -8,7 +8,6 @@ const router = express.Router();
 const { upload } = require('./multerConfig');
 const SALT_ROUNDS = 10;
 const JWT_SECRET = 'your-jwt-secret';
-const HttpError = require('./HttpError.js');
 
 // POST /register
 router.post('/register', upload.single('image'), (req, res) => {
