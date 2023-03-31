@@ -1,3 +1,4 @@
+// client\src\shared\hooks\auth-hook.js
 import { useState, useCallback, useEffect } from 'react';
 
 let logoutTimer;
