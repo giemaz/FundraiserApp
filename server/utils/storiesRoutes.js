@@ -22,7 +22,7 @@ module.exports = (authenticateJWT) => {
 	});
 
 	// POST /stories
-	router.post('/stories', authenticateJWT, upload.single('storyImage'), (req, res) => {
+	router.post('/stories', authenticateJWT, upload.single('image'), (req, res) => {
 		const { title, description, goal_amount } = req.body;
 		const user_id = req.user.userId;
 		if (!title || !description || !goal_amount || !user_id) {
@@ -43,6 +43,7 @@ module.exports = (authenticateJWT) => {
 		};
 
 		connection.query('INSERT INTO stories SET ?', newStory, (err, results) => {
+			console.error('Error details: ', err);
 			if (err) {
 				console.error(err);
 				res.status(500).send('Server error');
@@ -55,7 +56,7 @@ module.exports = (authenticateJWT) => {
 	});
 
 	// PUT /stories/:id
-	router.put('/stories/:id', upload.single('storyImage'), (req, res) => {
+	router.put('/stories/:id', upload.single('image'), (req, res) => {
 		const id = req.params.id;
 		const { title, description, goal_amount } = req.body;
 
