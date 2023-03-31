@@ -8,25 +8,28 @@ const router = express.Router();
 const { upload } = require('./multerConfig');
 const SALT_ROUNDS = 10;
 const JWT_SECRET = 'your-jwt-secret';
+const HttpError = require('./HttpError.js');
 
 // POST /register
 router.post('/register', upload.single('image'), (req, res) => {
 	console.log('Received request body:', req.body);
 	const { email, username, password } = req.body;
 	if (!email || !username || !password) {
-		res.status(400).send('Invalid request');
+		res.status(400).json({ message: 'Invalid request' });
 		return;
 	}
+
+	const image = req.file ? req.file.path.replace(/\\/g, '/') : null;
 
 	connection.query('SELECT * FROM users WHERE email = ?', [email], (err, results) => {
 		if (err) {
 			console.error(err);
-			res.status(500).send('Server error');
+			res.status(500).json({ message: 'Server error' });
 			return;
 		}
 
 		if (results.length > 0) {
-			res.status(409).send('Email already exists');
+			res.status(409).json({ message: 'Email already exists' });
 			return;
 		}
 
@@ -34,19 +37,19 @@ router.post('/register', upload.single('image'), (req, res) => {
 		bcrypt.hash(password, SALT_ROUNDS, (err, hash) => {
 			if (err) {
 				console.error(err);
-				res.status(500).send('Server error');
+				res.status(500).json({ message: 'Server error' });
 				return;
 			}
 
-			const newUser = { email, username, password: hash };
+			const newUser = { email, username, password: hash, image };
 			connection.query('INSERT INTO users SET ?', newUser, (err, results) => {
 				if (err) {
 					console.error(err);
-					res.status(500).send('Server error');
+					res.status(500).json({ message: 'Server error' });
 					return;
 				}
 
-				res.status(201).send('User created successfully');
+				res.status(201).json({ message: 'User created successfully' });
 			});
 		});
 	});
@@ -56,19 +59,19 @@ router.post('/register', upload.single('image'), (req, res) => {
 router.post('/login', (req, res) => {
 	const { email, password } = req.body;
 	if (!email || !password) {
-		res.status(400).send('Invalid request');
+		res.status(400).json({ message: 'Invalid request' });
 		return;
 	}
 
 	connection.query('SELECT * FROM users WHERE email = ?', [email], (err, results) => {
 		if (err) {
 			console.error(err);
-			res.status(500).send('Server error');
+			res.status(500).json({ message: 'Server error' });
 			return;
 		}
 
 		if (results.length === 0) {
-			res.status(401).send('Invalid email or password');
+			res.status(401).json({ message: 'Invalid email or password' });
 			return;
 		}
 
@@ -76,12 +79,12 @@ router.post('/login', (req, res) => {
 		bcrypt.compare(password, user.password, (err, result) => {
 			if (err) {
 				console.error(err);
-				res.status(500).send('Server error');
+				res.status(500).json({ message: 'Server error' });
 				return;
 			}
 
 			if (!result) {
-				res.status(401).send('Invalid email or password');
+				res.status(401).json({ message: 'Invalid email or password' });
 				return;
 			}
 
@@ -93,14 +96,14 @@ router.post('/login', (req, res) => {
 				}
 			);
 
-			res.status(200).send({ token });
+			res.status(200).json({ token });
 		});
 	});
 });
 
 // POST /logout
 router.post('/logout', authenticateJWT, (req, res) => {
-	res.status(200).send('Logged out successfully');
+	res.status(200).json({ message: 'Logged out successfully' });
 });
 
 module.exports = { router };

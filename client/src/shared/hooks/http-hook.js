@@ -6,26 +6,20 @@ export const useHttpClient = () => {
 
 	const activeHttpRequests = useRef([]);
 
-	const sendRequest = useCallback(async (url, method = 'GET', body = null, headers = {}, formData = false) => {
+	const sendRequest = useCallback(async (url, method = 'GET', body = null, headers = {}) => {
 		setIsLoading(true);
 		const httpAbortCtrl = new AbortController();
 		activeHttpRequests.current.push(httpAbortCtrl);
 
 		try {
-			let requestOptions = {
+			const requestOptions = {
 				method,
 				headers,
 				signal: httpAbortCtrl.signal,
 			};
 
-			if (formData) {
-				requestOptions = { ...requestOptions, body };
-			} else {
-				requestOptions = {
-					...requestOptions,
-					headers: { 'Content-Type': 'application/json', ...headers },
-					body: JSON.stringify(body),
-				};
+			if (body && method !== 'GET' && method !== 'HEAD') {
+				requestOptions.body = body instanceof FormData ? body : JSON.stringify(body);
 			}
 
 			const response = await fetch(url, requestOptions);

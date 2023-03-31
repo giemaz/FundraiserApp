@@ -3,6 +3,7 @@ import StoriesList from '../stories/components/StoriesList';
 import ErrorModal from '../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../shared/components/UIElements/LoadingSpinner';
 import { useHttpClient } from '../shared/hooks/http-hook';
+import './Home.css';
 
 const Home = () => {
 	const [loadedStories, setLoadedStories] = useState();
@@ -28,6 +29,11 @@ const Home = () => {
 			{isLoading && (
 				<div className='center'>
 					<LoadingSpinner />
+				</div>
+			)}
+			{!isLoading && (
+				<div className='title'>
+					<h1>Home Page</h1>
 				</div>
 			)}
 			{!isLoading && loadedStories && <StoriesList items={loadedStories} onDeleteStory={storyDeletedHandler} />}
