@@ -7,9 +7,10 @@ import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import ProgressBar from '../../shared/components/UIElements/ProgressBar';
 import { AuthContext } from '../../shared/context/auth-context';
 import { useHttpClient } from '../../shared/hooks/http-hook';
+import storyImg from '../../assets/defaultStory.jpg';
 import './StoryItem.css';
 
-const PlaceItem = ({ id, onDelete, title, description, image, goal_amount, current_amount, creatorId }) => {
+const StoryItem = ({ id, onDelete, title, description, image, goal_amount, current_amount, creatorId }) => {
 	const { isLoading, error, sendRequest, clearError } = useHttpClient();
 	const auth = useContext(AuthContext);
 	const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -56,18 +57,25 @@ const PlaceItem = ({ id, onDelete, title, description, image, goal_amount, curre
 				<Card className='story-item__content'>
 					{isLoading && <LoadingSpinner asOverlay />}
 					<div className='story-item__image'>
-						<img src={`http://localhost:3003/${image}`} alt={title} />
+						<img
+							src={image ? `http://localhost:3003/${image}` : storyImg}
+							alt={title}
+							onError={(e) => {
+								e.target.onerror = null;
+								e.target.src = storyImg;
+							}}
+						/>
 					</div>
 					<div className='story-item__info'>
 						<h2>{title}</h2>
-						<h3>{goal_amount}</h3>
 						<p>{description}</p>
+						<h3>{goal_amount}</h3>
 					</div>
 					<div>
 						<ProgressBar currentAmount={current_amount} goalAmount={goal_amount} />
 					</div>
 					<div className='story-item__actions'>
-						{auth.userId === creatorId && (
+						{auth.userType === 'admin' && (
 							<Button danger onClick={showDeleteWarningHandler}>
 								DELETE
 							</Button>
@@ -79,4 +87,4 @@ const PlaceItem = ({ id, onDelete, title, description, image, goal_amount, curre
 	);
 };
 
-export default PlaceItem;
+export default StoryItem;

@@ -1,9 +1,9 @@
 // server\app.js
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const { authenticateJWT } = require('./utils/middleware');
 const app = express();
-const path = require('path');
 
 app.use(cors());
 app.use(express.json());
