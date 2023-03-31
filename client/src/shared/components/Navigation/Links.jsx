@@ -1,63 +1,40 @@
-// client\src\shared\components\Navigation\Links.jsx
 import React, { useContext } from 'react';
-import { pagesMapping, RoutingContext } from '../../context/Routing';
+import { NavLink } from 'react-router-dom';
 import { AuthContext } from '../../context/auth-context';
-import classes from './Links.module.css';
+import './Links.css';
 
-function Links() {
-	const { setPage, page } = useContext(RoutingContext);
-	const { isLoggedIn, logout } = useContext(AuthContext);
-
-	const handleNavigation = (p) => {
-		console.log('Navigating to page:', p);
-		if (p === pagesMapping.accounts && !isLoggedIn) {
-			setPage(pagesMapping.auth);
-		} else {
-			setPage(p);
-		}
-	};
-
-	const handleLogout = () => {
-		logout();
-		setPage(pagesMapping.auth);
-	};
+const Links = (props) => {
+	const auth = useContext(AuthContext);
 
 	return (
-		<div className={classes.navLinks}>
-			{Object.values(pagesMapping).map((p) => {
-				if (p === pagesMapping.auth) {
-					return (
-						<button
-							key={p}
-							className={page === p ? classes.active : ''}
-							onClick={isLoggedIn ? handleLogout : () => setPage(p)}>
-							{isLoggedIn ? 'Logout' : p}
-						</button>
-					);
-				} else if (p === pagesMapping.accounts) {
-					return (
-						isLoggedIn && (
-							<button
-								key={p}
-								className={page === p ? classes.active : ''}
-								onClick={() => handleNavigation(p)}>
-								{p}
-							</button>
-						)
-					);
-				} else {
-					return (
-						<button
-							key={p}
-							className={page === p ? classes.active : ''}
-							onClick={() => handleNavigation(p)}>
-							{p}
-						</button>
-					);
-				}
-			})}
-		</div>
+		<ul className='navLinks'>
+			<li>
+				<NavLink to='/' exact='true'>
+					Home
+				</NavLink>
+			</li>
+			{auth.isLoggedIn && (
+				<li>
+					<NavLink to='/stories/new'>Create</NavLink>
+				</li>
+			)}
+			{!auth.isLoggedIn && (
+				<li>
+					<NavLink to='/auth'>Auth</NavLink>
+				</li>
+			)}
+			{auth.isLoggedIn && (
+				<li>
+					<NavLink to={`/${auth.userId}/admin`}>Admin</NavLink>
+				</li>
+			)}
+			{auth.isLoggedIn && (
+				<li>
+					<button onClick={auth.logout}>Logout</button>
+				</li>
+			)}
+		</ul>
 	);
-}
+};
 
 export default Links;

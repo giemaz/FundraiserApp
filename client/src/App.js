@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
-import { RoutingContext, pagesMapping } from './shared/context/Routing';
-
+// client\src\App.js
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import MainNavigation from './shared/components/Navigation/MainNavigation';
 import Home from './pages/Home';
 import Create from './pages/Create';
@@ -8,35 +8,32 @@ import Admin from './pages/Admin';
 import Auth from './pages/Auth';
 import { AuthContext } from './shared/context/auth-context';
 import { useAuth } from './shared/hooks/auth-hook';
-import Router from './shared/context/Routing';
 
 const App = () => {
 	const { token, login, logout, userId, userType } = useAuth();
 
-	const { page } = useContext(RoutingContext);
-	console.log('Current page:', page);
+	let routes;
 
-	const renderPage = () => {
-		console.log('Rendering page:', page);
-		if (!token) {
-			if (page === pagesMapping.auth || page === pagesMapping.home || page === pagesMapping.create) {
-				console.log('Rendering Auth');
-				return <Auth />;
-			}
-		}
-
-		switch (page) {
-			case pagesMapping.auth:
-				return token ? <Home /> : <Auth />;
-			case pagesMapping.create:
-				return token ? <Create /> : <Auth />;
-			case pagesMapping.admin:
-				return token && userType === 'admin' ? <Admin /> : <Home />;
-			// Add other cases if needed
-			default:
-				return <Home />;
-		}
-	};
+	if (token) {
+		routes = (
+			<Routes>
+				<Route path='/' element={<Home />} />
+				<Route path='/stories/new' element={<Create />} />
+				<Route path='/auth' element={<Auth />} />
+				{userType === 'admin' && <Route path='/admin' element={<Admin />} />}
+				<Route path='*' element={<Navigate replace to='/' />} />
+			</Routes>
+		);
+	} else {
+		routes = (
+			<Routes>
+				<Route path='/' element={<Home />} />
+				<Route path='/auth' element={<Auth />} />
+				<Route path='/stories/new' element={<Navigate replace to='/auth' />} />
+				<Route path='*' element={<Navigate replace to='/' />} />
+			</Routes>
+		);
+	}
 
 	return (
 		<AuthContext.Provider
@@ -50,7 +47,7 @@ const App = () => {
 			}}>
 			<Router>
 				<MainNavigation />
-				<main>{renderPage()}</main>
+				<main>{routes}</main>
 			</Router>
 		</AuthContext.Provider>
 	);

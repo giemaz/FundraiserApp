@@ -48,8 +48,15 @@ router.post('/register', upload.single('image'), (req, res) => {
 					res.status(500).json({ message: 'Server error' });
 					return;
 				}
-
-				res.status(201).json({ message: 'User created successfully' });
+				const userId = results.insertId;
+				const token = jwt.sign(
+					{ userId: userId, email: email, username: username, user_type: 'writer' },
+					JWT_SECRET,
+					{
+						expiresIn: '1h',
+					}
+				);
+				res.status(201).json({ message: 'User created successfully', userId: userId, token: token });
 			});
 		});
 	});
@@ -96,7 +103,7 @@ router.post('/login', (req, res) => {
 				}
 			);
 
-			res.status(200).json({ token });
+			res.status(200).json({ userId: user.id, token: token });
 		});
 	});
 });
