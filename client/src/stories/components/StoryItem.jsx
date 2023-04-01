@@ -10,26 +10,45 @@ import { useHttpClient } from '../../shared/hooks/http-hook';
 import storyImg from '../../assets/defaultStory.jpg';
 import './StoryItem.css';
 
-const StoryItem = ({ id, onDelete, title, description, image, goal_amount, current_amount, creatorId }) => {
+const StoryItem = ({ id, onDelete, title, description, image, goal_amount, current_amount }) => {
 	const { isLoading, error, sendRequest, clearError } = useHttpClient();
 	const auth = useContext(AuthContext);
 	const [showConfirmModal, setShowConfirmModal] = useState(false);
+	const [currentAction, setCurrentAction] = useState(null);
 
 	const showDeleteWarningHandler = () => {
+		setCurrentAction('delete');
 		setShowConfirmModal(true);
 	};
 
-	const cancelDeleteHandler = () => {
+	const showConfirmWarningHandler = () => {
+		setCurrentAction('confirm');
+		setShowConfirmModal(true);
+	};
+
+	const cancelHandler = () => {
 		setShowConfirmModal(false);
 	};
 
-	const confirmDeleteHandler = async () => {
+	const confirmHandler = async () => {
 		setShowConfirmModal(false);
 		try {
-			await sendRequest(`http://localhost:3003/stories/${id}`, 'DELETE', null, {
-				Authorization: 'Bearer ' + auth.token,
-			});
-			onDelete(id);
+			if (currentAction === 'delete') {
+				await sendRequest(`http://localhost:3003/stories/${id}`, 'DELETE', null, {
+					Authorization: 'Bearer ' + auth.token,
+				});
+				onDelete(id);
+			} else if (currentAction === 'confirm') {
+				await sendRequest(
+					`http://localhost:3003/stories/${id}/approve`,
+					'PUT',
+					{ is_approved: true },
+					{
+						'Content-Type': 'application/json',
+						Authorization: 'Bearer ' + auth.token,
+					}
+				);
+			}
 		} catch (err) {}
 	};
 
@@ -38,20 +57,24 @@ const StoryItem = ({ id, onDelete, title, description, image, goal_amount, curre
 			<ErrorModal error={error} onClear={clearError} />
 			<Modal
 				show={showConfirmModal}
-				onCancel={cancelDeleteHandler}
-				header='Are you sure?'
+				onCancel={cancelHandler}
+				header={currentAction === 'delete' ? 'Are you sure?' : 'Confirm the story'}
 				footerClass='story-item__modal-actions'
 				footer={
 					<>
-						<Button inverse onClick={cancelDeleteHandler}>
+						<Button inverse onClick={cancelHandler}>
 							CANCEL
 						</Button>
-						<Button danger onClick={confirmDeleteHandler}>
-							DELETE
+						<Button danger onClick={confirmHandler}>
+							{currentAction === 'delete' ? 'DELETE' : 'CONFIRM'}
 						</Button>
 					</>
 				}>
-				<p>Do you want to proceed and delete this story? Please note that it can't be undone thereafter.</p>
+				<p>
+					{currentAction === 'delete'
+						? 'Do you want to proceed and delete this story?'
+						: 'Do you want to confirm this story?'}
+				</p>
 			</Modal>
 			<li className='story-item'>
 				<Card className='story-item__content'>
@@ -76,9 +99,12 @@ const StoryItem = ({ id, onDelete, title, description, image, goal_amount, curre
 					</div>
 					<div className='story-item__actions'>
 						{auth.userType === 'admin' && (
-							<Button danger onClick={showDeleteWarningHandler}>
-								DELETE
-							</Button>
+							<div>
+								<Button onClick={showConfirmWarningHandler}>CONFIRM</Button>
+								<Button danger onClick={showDeleteWarningHandler}>
+									DELETE
+								</Button>
+							</div>
 						)}
 					</div>
 				</Card>
@@ -86,5 +112,4 @@ const StoryItem = ({ id, onDelete, title, description, image, goal_amount, curre
 		</>
 	);
 };
-
 export default StoryItem;

@@ -5,7 +5,7 @@ import StoryItem from './StoryItem';
 import Button from '../../shared/components/FormElements/Button';
 import './StoriesList.css';
 
-const StoriesList = ({ items, onDeleteStory }) => {
+const StoriesList = ({ items, onDeleteStory, onConfirmStatusChange }) => {
 	if (items.length === 0) {
 		return (
 			<div className='story-list center'>
@@ -29,6 +29,7 @@ const StoriesList = ({ items, onDeleteStory }) => {
 					goal_amount={story.goal_amount}
 					current_amount={story.current_amount}
 					onDelete={onDeleteStory}
+					onConfirmStatusChange={onConfirmStatusChange}
 				/>
 			))}
 		</ul>

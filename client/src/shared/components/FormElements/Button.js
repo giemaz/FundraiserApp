@@ -1,19 +1,9 @@
 import React from 'react';
-import { RoutingContext } from '../../context/Routing';
+import { Link } from 'react-router-dom';
 
 import './Button.css';
 
 const Button = (props) => {
-	const { setPage } = React.useContext(RoutingContext);
-
-	const handleClick = () => {
-		if (props.to) {
-			setPage(props.to.slice(1).toLowerCase());
-		} else if (props.onClick) {
-			props.onClick();
-		}
-	};
-
 	if (props.href) {
 		return (
 			<a
@@ -25,14 +15,25 @@ const Button = (props) => {
 			</a>
 		);
 	}
-
+	if (props.to) {
+		return (
+			<Link
+				to={props.to}
+				exact={props.exact}
+				className={`button button--${props.size || 'default'} ${props.inverse && 'button--inverse'} ${
+					props.danger && 'button--danger'
+				}`}>
+				{props.children}
+			</Link>
+		);
+	}
 	return (
 		<button
 			className={`button button--${props.size || 'default'} ${props.inverse && 'button--inverse'} ${
 				props.danger && 'button--danger'
 			}`}
 			type={props.type}
-			onClick={handleClick}
+			onClick={props.onClick}
 			disabled={props.disabled}>
 			{props.children}
 		</button>
