@@ -56,7 +56,7 @@
 }
 .truncate-description {
 	position: relative;
-	height: 3.6em;
+	height: 6em;
 	overflow: hidden;
 	text-align: justify;
 	margin-right: -1em;

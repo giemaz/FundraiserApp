@@ -9,7 +9,9 @@ export const useHttpClient = () => {
 
 	const sendRequest = useCallback(async (url, method = 'GET', body = null, headers = {}) => {
 		setIsLoading(true);
+
 		const httpAbortCtrl = new AbortController();
+
 		activeHttpRequests.current.push(httpAbortCtrl);
 
 		try {
@@ -34,10 +36,12 @@ export const useHttpClient = () => {
 			}
 
 			setIsLoading(false);
+
 			return responseData;
 		} catch (err) {
 			setError(err.message);
 			setIsLoading(false);
+
 			throw err;
 		}
 	}, []);

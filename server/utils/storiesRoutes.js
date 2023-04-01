@@ -1,7 +1,6 @@
 // server/utils/storiesRoutes.js
 const express = require('express');
 const connection = require('../db');
-const { v4: uuidv4 } = require('uuid');
 const { upload } = require('./multerConfig');
 const { authenticateJWT } = require('./middleware');
 const fs = require('fs');
@@ -18,6 +17,26 @@ module.exports = (authenticateJWT) => {
 			}
 
 			res.send(results);
+		});
+	});
+
+	// GET /stories/:id
+	router.get('/stories/:id', (req, res) => {
+		const id = req.params.id;
+
+		connection.query('SELECT * FROM stories WHERE id = ?', [id], (err, results) => {
+			if (err) {
+				console.error(err);
+				res.status(500).json({ message: 'Server Error!' });
+				return;
+			}
+
+			if (results.length === 0) {
+				res.status(404).json({ message: 'Story not found' });
+				return;
+			}
+
+			res.send(results[0]);
 		});
 	});
 
@@ -109,40 +128,6 @@ module.exports = (authenticateJWT) => {
 			);
 		});
 	});
-
-	// PUT /stories/:id/block
-	// router.put('/stories/:id/block', authenticateJWT, (req, res) => {
-	// 	const accountId = req.params.id;
-
-	// 	connection.query('SELECT * FROM stories WHERE id = ?', [accountId], (err, results) => {
-	// 		if (err) {
-	// 			console.error(err);
-	// 			res.status(500).send('Server error');
-	// 			return;
-	// 		}
-
-	// 		if (results.length === 0) {
-	// 			res.status(404).send('Account not found');
-	// 			return;
-	// 		}
-
-	// 		const account = results[0];
-
-	// 		connection.query(
-	// 			'UPDATE stories SET blocked = ? WHERE id = ?',
-	// 			[!account.blocked, accountId],
-	// 			(err, results) => {
-	// 				if (err) {
-	// 					console.error(err);
-	// 					res.status(500).send('Server error');
-	// 					return;
-	// 				}
-
-	// 				res.status(200).send(`Account ${!account.blocked ? 'blocked' : 'unblocked'} successfully`);
-	// 			}
-	// 		);
-	// 	});
-	// });
 
 	return router;
 };

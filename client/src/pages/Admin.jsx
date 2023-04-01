@@ -4,7 +4,6 @@ import ErrorModal from '../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../shared/components/UIElements/LoadingSpinner';
 import { useHttpClient } from '../shared/hooks/http-hook';
 import { AuthContext } from '../shared/context/auth-context';
-import './Admin.css';
 
 const Admin = () => {
 	const [loadedStories, setLoadedStories] = useState();
@@ -36,12 +35,14 @@ const Admin = () => {
 				</div>
 			)}
 			{!isLoading && (
-				<div className='title'>
-					<h1>Admin Page</h1>
+				<div className='admin-container'>
+					<div className='title'>
+						<h1>Admin Page</h1>
+					</div>
+					{!isLoading && loadedStories && (
+						<StoriesList items={loadedStories} onDeleteStory={storyDeletedHandler} showButtons={true} />
+					)}
 				</div>
-			)}
-			{!isLoading && loadedStories && (
-				<StoriesList items={loadedStories} onDeleteStory={storyDeletedHandler} showButtons={true} />
 			)}
 		</>
 	);

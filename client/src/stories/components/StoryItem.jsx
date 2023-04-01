@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Card from '../../shared/components/UIElements/Card';
 import Button from '../../shared/components/FormElements/Button';
 import Modal from '../../shared/components/UIElements/Modal';
@@ -25,6 +26,11 @@ const StoryItem = ({
 	const auth = useContext(AuthContext);
 	const [showConfirmModal, setShowConfirmModal] = useState(false);
 	const [currentAction, setCurrentAction] = useState(null);
+	const navigate = useNavigate();
+
+	const navigateToStoryPage = () => {
+		navigate(`/stories/${id}`);
+	};
 
 	const showDeleteWarningHandler = () => {
 		setCurrentAction('delete');
@@ -89,26 +95,28 @@ const StoryItem = ({
 			<li className='story-item'>
 				<Card className='story-item__content'>
 					{isLoading && <LoadingSpinner asOverlay />}
-					<div className='story-item__image'>
-						<img
-							src={image ? `http://localhost:3003/${image}` : storyImg}
-							alt={title}
-							onError={(e) => {
-								e.target.onerror = null;
-								e.target.src = storyImg;
-							}}
-						/>
-					</div>
-					<div className='story-item__info'>
-						<h2>{title}</h2>
-						<p className='truncate-description'>{description}</p>
-						<div className='story-item__sum'>
-							<h3>{current_amount}€</h3>
-							<h3>{goal_amount}€</h3>
+					<div onClick={navigateToStoryPage}>
+						<div className='story-item__image'>
+							<img
+								src={image ? `http://localhost:3003/${image}` : storyImg}
+								alt={title}
+								onError={(e) => {
+									e.target.onerror = null;
+									e.target.src = storyImg;
+								}}
+							/>
 						</div>
-					</div>
-					<div>
-						<ProgressBar currentAmount={current_amount} goalAmount={goal_amount} />
+						<div className='story-item__info'>
+							<h2>{title}</h2>
+							<p className='truncate-description'>{description}</p>
+							<div className='story-item__sum'>
+								<h3>{current_amount}€</h3>
+								<h3>{goal_amount}€</h3>
+							</div>
+						</div>
+						<div>
+							<ProgressBar currentAmount={current_amount} goalAmount={goal_amount} />
+						</div>
 					</div>
 					<div className='story-item__actions'>
 						{auth.userType === 'admin' && showButtons && (

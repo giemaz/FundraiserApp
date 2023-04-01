@@ -3,6 +3,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import MainNavigation from './shared/components/Navigation/MainNavigation';
 import Home from './pages/Home';
+import Story from './pages/Story';
 import Create from './pages/Create';
 import Admin from './pages/Admin';
 import Auth from './pages/Auth';
@@ -19,6 +20,7 @@ const App = () => {
 			<Routes>
 				<Route path='/' element={<Home />} />
 				<Route path='/stories/new' element={<Create />} />
+				<Route path='/stories/:id' element={<Story />} />
 				<Route path='/auth' element={<Auth />} />
 				{userType === 'admin' && <Route path='/admin' element={<Admin />} />}
 				<Route path='*' element={<Navigate replace to='/' />} />
@@ -28,8 +30,9 @@ const App = () => {
 		routes = (
 			<Routes>
 				<Route path='/' element={<Home />} />
-				<Route path='/auth' element={<Auth />} />
+				<Route path='/stories/:id' element={<Story />} />
 				<Route path='/stories/new' element={<Navigate replace to='/auth' />} />
+				<Route path='/auth' element={<Auth />} />
 				<Route path='*' element={<Navigate replace to='/' />} />
 			</Routes>
 		);
