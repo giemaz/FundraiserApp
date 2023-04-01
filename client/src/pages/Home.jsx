@@ -36,7 +36,7 @@ const Home = () => {
 					<h1>Home Page</h1>
 				</div>
 			)}
-			{!isLoading && loadedStories && <StoriesList items={loadedStories} />}
+			{!isLoading && loadedStories && <StoriesList items={loadedStories} showButtons={false} />}
 		</>
 	);
 };

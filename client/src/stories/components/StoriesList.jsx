@@ -5,7 +5,7 @@ import StoryItem from './StoryItem';
 
 import './StoriesList.css';
 
-const StoriesList = ({ items, onDeleteStory, onConfirmStatusChange }) => {
+const StoriesList = ({ items, onDeleteStory, onConfirmStatusChange, showButtons }) => {
 	if (items.length === 0) {
 		return (
 			<div className='story-list center'>
@@ -29,6 +29,8 @@ const StoriesList = ({ items, onDeleteStory, onConfirmStatusChange }) => {
 					current_amount={story.current_amount}
 					onDelete={onDeleteStory}
 					onConfirmStatusChange={onConfirmStatusChange}
+					showButtons={showButtons}
+					isApproved={story.is_approved}
 				/>
 			))}
 		</ul>

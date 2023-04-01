@@ -10,7 +10,7 @@ import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from '../shared/util/validator
 import { useForm } from '../shared/hooks/form-hook';
 import { useHttpClient } from '../shared/hooks/http-hook';
 import { AuthContext } from '../shared/context/auth-context';
-import { RoutingContext, pagesMapping } from '../shared/context/Routing';
+
 import './Create.css';
 
 const Create = () => {
@@ -38,8 +38,6 @@ const Create = () => {
 		false
 	);
 
-	const { setPage } = useContext(RoutingContext);
-
 	const placeSubmitHandler = async (event) => {
 		event.preventDefault();
 		try {
@@ -51,7 +49,6 @@ const Create = () => {
 			await sendRequest('http://localhost:3003/stories', 'POST', formData, {
 				Authorization: 'Bearer ' + auth.token,
 			});
-			setPage(pagesMapping.home);
 		} catch (err) {}
 	};
 

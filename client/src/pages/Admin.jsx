@@ -40,7 +40,9 @@ const Admin = () => {
 					<h1>Admin Page</h1>
 				</div>
 			)}
-			{!isLoading && loadedStories && <StoriesList items={loadedStories} onDeleteStory={storyDeletedHandler} />}
+			{!isLoading && loadedStories && (
+				<StoriesList items={loadedStories} onDeleteStory={storyDeletedHandler} showButtons={true} />
+			)}
 		</>
 	);
 };

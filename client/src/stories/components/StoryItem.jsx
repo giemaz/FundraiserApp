@@ -10,19 +10,21 @@ import { useHttpClient } from '../../shared/hooks/http-hook';
 import storyImg from '../../assets/defaultStory.jpg';
 import './StoryItem.css';
 
-const StoryItem = ({ id, onDelete, title, description, image, goal_amount, current_amount }) => {
+const StoryItem = ({
+	id,
+	onDelete,
+	title,
+	description,
+	image,
+	goal_amount,
+	current_amount,
+	showButtons,
+	isApproved,
+}) => {
 	const { isLoading, error, sendRequest, clearError } = useHttpClient();
 	const auth = useContext(AuthContext);
 	const [showConfirmModal, setShowConfirmModal] = useState(false);
 	const [currentAction, setCurrentAction] = useState(null);
-
-	const truncateDescription = (description, wordLimit) => {
-		const words = description.split(' ');
-		if (words.length > wordLimit) {
-			return words.slice(0, wordLimit).join(' ');
-		}
-		return description;
-	};
 
 	const showDeleteWarningHandler = () => {
 		setCurrentAction('delete');
@@ -99,20 +101,20 @@ const StoryItem = ({ id, onDelete, title, description, image, goal_amount, curre
 					</div>
 					<div className='story-item__info'>
 						<h2>{title}</h2>
-						<p className='truncate-description'>{truncateDescription(description, 20)}</p>
+						<p className='truncate-description'>{description}</p>
 						<div className='story-item__sum'>
-							<h3>{current_amount}</h3>
-							<h3>{goal_amount}</h3>
+							<h3>{current_amount}€</h3>
+							<h3>{goal_amount}€</h3>
 						</div>
 					</div>
 					<div>
 						<ProgressBar currentAmount={current_amount} goalAmount={goal_amount} />
 					</div>
 					<div className='story-item__actions'>
-						{auth.userType === 'admin' && (
+						{auth.userType === 'admin' && showButtons && (
 							<div>
 								<div>
-									<Button onClick={showConfirmWarningHandler}>CONFIRM</Button>
+									{!isApproved && <Button onClick={showConfirmWarningHandler}>CONFIRM</Button>}
 									<Button danger onClick={showDeleteWarningHandler}>
 										DELETE
 									</Button>
