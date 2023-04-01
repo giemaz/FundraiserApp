@@ -7,13 +7,13 @@ const fs = require('fs');
 
 module.exports = (authenticateJWT) => {
 	//GET
-	router.get('/stories/unapproved', authenticateJWT, (req, res) => {
+	router.get('/stories', authenticateJWT, (req, res) => {
 		if (req.user.user_type !== 'admin') {
 			res.status(403).json({ message: 'Forbidden' });
 			return;
 		}
 
-		connection.query('SELECT * FROM stories WHERE is_approved = FALSE', (err, results) => {
+		connection.query('SELECT * FROM stories', (err, results) => {
 			if (err) {
 				console.error(err);
 				res.status(500).json({ message: 'Server error' });

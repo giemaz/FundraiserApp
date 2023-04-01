@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import StoriesList from '../stories/components/StoriesList';
 import ErrorModal from '../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../shared/components/UIElements/LoadingSpinner';
 import { useHttpClient } from '../shared/hooks/http-hook';
-import './Home.css';
+import { AuthContext } from '../shared/context/auth-context';
+import './Admin.css';
 
 const Home = () => {
 	const [loadedStories, setLoadedStories] = useState();
 	const { isLoading, error, sendRequest, clearError } = useHttpClient();
+	const auth = useContext(AuthContext);
 
 	useEffect(() => {
 		const fetchStories = async () => {
 			try {
-				const responseData = await sendRequest(`http://localhost:3003/stories`);
-				setLoadedStories(responseData.stories);
+				const responseData = await sendRequest(`http://localhost:3003/stories/approved`, 'GET', null, {
+					Authorization: 'Bearer ' + auth.token,
+				});
+				setLoadedStories(responseData);
 			} catch (err) {}
 		};
 		fetchStories();
-	}, [sendRequest]);
-
-	const storyDeletedHandler = (deletedStoryId) => {
-		setLoadedStories((prevStories) => prevStories.filter((story) => story.id !== deletedStoryId));
-	};
+	}, [sendRequest, auth.token]);
 
 	return (
 		<>
@@ -36,7 +36,7 @@ const Home = () => {
 					<h1>Home Page</h1>
 				</div>
 			)}
-			{!isLoading && loadedStories && <StoriesList items={loadedStories} onDeleteStory={storyDeletedHandler} />}
+			{!isLoading && loadedStories && <StoriesList items={loadedStories} />}
 		</>
 	);
 };

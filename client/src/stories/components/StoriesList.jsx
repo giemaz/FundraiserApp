@@ -2,7 +2,7 @@ import React from 'react';
 // import { pagesMapping } from '../shared/context/Routing';
 import Card from '../../shared/components/UIElements/Card';
 import StoryItem from './StoryItem';
-import Button from '../../shared/components/FormElements/Button';
+
 import './StoriesList.css';
 
 const StoriesList = ({ items, onDeleteStory, onConfirmStatusChange }) => {
@@ -10,8 +10,7 @@ const StoriesList = ({ items, onDeleteStory, onConfirmStatusChange }) => {
 		return (
 			<div className='story-list center'>
 				<Card>
-					<h2>No stories found. Maybe create one?</h2>
-					<Button to='/create'>Create Story</Button>
+					<h2>No stories found.</h2>
 				</Card>
 			</div>
 		);

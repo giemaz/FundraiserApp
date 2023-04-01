@@ -9,7 +9,7 @@ const router = express.Router();
 
 module.exports = (authenticateJWT) => {
 	// GET /stories
-	router.get('/stories', (req, res) => {
+	router.get('/stories/approved', (req, res) => {
 		connection.query('SELECT * FROM stories WHERE is_approved = TRUE', (err, results) => {
 			if (err) {
 				console.error(err);

@@ -16,6 +16,14 @@ const StoryItem = ({ id, onDelete, title, description, image, goal_amount, curre
 	const [showConfirmModal, setShowConfirmModal] = useState(false);
 	const [currentAction, setCurrentAction] = useState(null);
 
+	const truncateDescription = (description, wordLimit) => {
+		const words = description.split(' ');
+		if (words.length > wordLimit) {
+			return words.slice(0, wordLimit).join(' ');
+		}
+		return description;
+	};
+
 	const showDeleteWarningHandler = () => {
 		setCurrentAction('delete');
 		setShowConfirmModal(true);
@@ -91,8 +99,11 @@ const StoryItem = ({ id, onDelete, title, description, image, goal_amount, curre
 					</div>
 					<div className='story-item__info'>
 						<h2>{title}</h2>
-						<p>{description}</p>
-						<h3>{goal_amount}</h3>
+						<p className='truncate-description'>{truncateDescription(description, 20)}</p>
+						<div className='story-item__sum'>
+							<h3>{current_amount}</h3>
+							<h3>{goal_amount}</h3>
+						</div>
 					</div>
 					<div>
 						<ProgressBar currentAmount={current_amount} goalAmount={goal_amount} />
@@ -100,10 +111,12 @@ const StoryItem = ({ id, onDelete, title, description, image, goal_amount, curre
 					<div className='story-item__actions'>
 						{auth.userType === 'admin' && (
 							<div>
-								<Button onClick={showConfirmWarningHandler}>CONFIRM</Button>
-								<Button danger onClick={showDeleteWarningHandler}>
-									DELETE
-								</Button>
+								<div>
+									<Button onClick={showConfirmWarningHandler}>CONFIRM</Button>
+									<Button danger onClick={showDeleteWarningHandler}>
+										DELETE
+									</Button>
+								</div>
 							</div>
 						)}
 					</div>

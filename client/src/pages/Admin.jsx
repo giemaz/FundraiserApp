@@ -14,7 +14,7 @@ const Admin = () => {
 	useEffect(() => {
 		const fetchStories = async () => {
 			try {
-				const responseData = await sendRequest(`http://localhost:3003/stories/unapproved`, 'GET', null, {
+				const responseData = await sendRequest(`http://localhost:3003/stories`, 'GET', null, {
 					Authorization: 'Bearer ' + auth.token,
 				});
 				setLoadedStories(responseData);
