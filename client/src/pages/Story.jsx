@@ -21,7 +21,7 @@ const Story = () => {
 	const [story, setStory] = useState(null);
 	const [donations, setDonations] = useState([]);
 
-	const amountLeftToGoal = story ? story.goal_amount - story.current_amount : 0;
+	const amountLeftToGoal = story ? Math.max(story.goal_amount - story.current_amount, 0) : 0;
 
 	const fetchStory = useCallback(async () => {
 		try {
