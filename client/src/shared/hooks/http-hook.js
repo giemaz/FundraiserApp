@@ -15,24 +15,38 @@ export const useHttpClient = () => {
 		activeHttpRequests.current.push(httpAbortCtrl);
 
 		try {
+			if (body && method !== 'GET' && method !== 'HEAD') {
+				if (body instanceof FormData) {
+					// Remove the 'Content-Type' header for FormData
+					delete headers['Content-Type'];
+				} else {
+					// Set the 'Content-Type' header for JSON
+					headers['Content-Type'] = 'application/json';
+					body = JSON.stringify(body);
+				}
+			}
+
 			const requestOptions = {
 				method,
+				body,
 				headers,
 				signal: httpAbortCtrl.signal,
 			};
 
-			if (body && method !== 'GET' && method !== 'HEAD') {
-				requestOptions.body = body instanceof FormData ? body : JSON.stringify(body);
-			}
-
 			const response = await fetch(url, requestOptions);
 
-			const responseData = await response.json();
+			let responseData;
+			const contentType = response.headers.get('Content-Type');
+			if (contentType && contentType.includes('application/json')) {
+				responseData = await response.json();
+			} else {
+				responseData = await response.text();
+			}
 
 			activeHttpRequests.current = activeHttpRequests.current.filter((reqCtrl) => reqCtrl !== httpAbortCtrl);
 
 			if (!response.ok) {
-				throw new Error(responseData.message);
+				throw new Error(responseData.message || responseData);
 			}
 
 			setIsLoading(false);

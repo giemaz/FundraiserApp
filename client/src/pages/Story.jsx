@@ -1,8 +1,8 @@
 // client\src\pages\Story.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Card from '../shared/components/UIElements/Card';
 import { useParams } from 'react-router-dom';
-import Button from '../shared/components/FormElements/Button';
+// import Button from '../shared/components/FormElements/Button';
 import Modal from '../shared/components/UIElements/Modal';
 import ErrorModal from '../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../shared/components/UIElements/LoadingSpinner';
@@ -12,27 +12,30 @@ import { useHttpClient } from '../shared/hooks/http-hook';
 
 import storyImg from '../assets/defaultStory.jpg';
 import './Story.css';
-import DonationForm from '../shared/components/DonationForm/DonationForm';
+import DonationForm from '../stories/components/DonationForm';
+import Donation from '../stories/components/Donation';
 
 const Story = () => {
 	const { isLoading, error, sendRequest, clearError } = useHttpClient();
 	const { id } = useParams();
 	const [story, setStory] = useState(null);
+	const [donations, setDonations] = useState([]);
 
 	const amountLeftToGoal = story ? story.goal_amount - story.current_amount : 0;
 
-	const donationHandler = () => {};
+	const fetchStory = useCallback(async () => {
+		try {
+			const responseData = await sendRequest(`http://localhost:3003/stories/${id}`);
+			const donationData = await sendRequest(`http://localhost:3003/stories/${id}/donations`);
+
+			setStory(responseData);
+			setDonations(donationData);
+		} catch (err) {}
+	}, [sendRequest, id]);
 
 	useEffect(() => {
-		const fetchStory = async () => {
-			try {
-				const responseData = await sendRequest(`http://localhost:3003/stories/${id}`);
-
-				setStory(responseData);
-			} catch (err) {}
-		};
 		fetchStory();
-	}, [sendRequest, id]);
+	}, [fetchStory]);
 
 	if (isLoading) {
 		return (
@@ -81,10 +84,19 @@ const Story = () => {
 					</div>
 					<div className='storyPage-item__actions'>
 						<div>{amountLeftToGoal}€ left to the goal</div>
-						<DonationForm />
+						<DonationForm storyId={id} onDonationSuccess={fetchStory} />
 					</div>
 				</Card>
 			</li>
+			<ul className='donationList'>
+				{donations.map((donation) => (
+					<Donation
+						key={donation.id}
+						donor_name={donation.donor_name}
+						donation_amount={donation.donation_amount}
+					/>
+				))}
+			</ul>
 		</>
 	);
 };

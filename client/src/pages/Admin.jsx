@@ -9,6 +9,7 @@ const Admin = () => {
 	const [loadedStories, setLoadedStories] = useState();
 	const { isLoading, error, sendRequest, clearError } = useHttpClient();
 	const auth = useContext(AuthContext);
+	const [refreshKey, setRefreshKey] = useState(0);
 
 	useEffect(() => {
 		const fetchStories = async () => {
@@ -21,6 +22,13 @@ const Admin = () => {
 		};
 		fetchStories();
 	}, [sendRequest, auth.token]);
+
+	const storyConfirmedHandler = (confirmedStoryId) => {
+		setLoadedStories((prevStories) =>
+			prevStories.map((story) => (story.id === confirmedStoryId ? { ...story, is_approved: true } : story))
+		);
+		setRefreshKey((prevKey) => prevKey + 1);
+	};
 
 	const storyDeletedHandler = (deletedStoryId) => {
 		setLoadedStories((prevStories) => prevStories.filter((story) => story.id !== deletedStoryId));
@@ -40,7 +48,13 @@ const Admin = () => {
 						<h1>Admin Page</h1>
 					</div>
 					{!isLoading && loadedStories && (
-						<StoriesList items={loadedStories} onDeleteStory={storyDeletedHandler} showButtons={true} />
+						<StoriesList
+							key={refreshKey}
+							items={loadedStories}
+							onDeleteStory={storyDeletedHandler}
+							showButtons={true}
+							onConfirmStory={storyConfirmedHandler}
+						/>
 					)}
 				</div>
 			)}

@@ -26,6 +26,7 @@ module.exports = (authenticateJWT) => {
 
 	//PUT
 	router.put('/stories/:id/approve', authenticateJWT, (req, res) => {
+		console.log('Received request body:', req.body);
 		const storyId = req.params.id;
 		const { is_approved } = req.body;
 

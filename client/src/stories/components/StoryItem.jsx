@@ -14,6 +14,7 @@ import './StoryItem.css';
 const StoryItem = ({
 	id,
 	onDelete,
+	onConfirmStory,
 	title,
 	description,
 	image,
@@ -64,6 +65,7 @@ const StoryItem = ({
 						Authorization: 'Bearer ' + auth.token,
 					}
 				);
+				onConfirmStory(id);
 			}
 		} catch (err) {}
 	};

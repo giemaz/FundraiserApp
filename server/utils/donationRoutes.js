@@ -23,6 +23,8 @@ router.post('/stories/:story_id/donations', (req, res) => {
 	const { story_id } = req.params;
 	const { donor_name, donation_amount } = req.body;
 
+	console.log('Request body:', req.body);
+
 	if (!donor_name || !donation_amount) {
 		res.status(400).json({ message: 'Invalid request' });
 		return;
