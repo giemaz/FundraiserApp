@@ -12,6 +12,7 @@ import { useHttpClient } from '../shared/hooks/http-hook';
 
 import storyImg from '../assets/defaultStory.jpg';
 import './Story.css';
+import DonationForm from '../shared/components/DonationForm/DonationForm';
 
 const Story = () => {
 	const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -80,9 +81,7 @@ const Story = () => {
 					</div>
 					<div className='storyPage-item__actions'>
 						<div>{amountLeftToGoal}€ left to the goal</div>
-						<Button inverse onClick={donationHandler}>
-							DONATE
-						</Button>
+						<DonationForm />
 					</div>
 				</Card>
 			</li>
