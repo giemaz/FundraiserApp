@@ -21,9 +21,8 @@ router.get('/stories/:story_id/donations', (req, res) => {
 // POST
 router.post('/stories/:story_id/donations', (req, res) => {
 	const { story_id } = req.params;
-	const { donor_name, donation_amount } = req.body;
-
-	console.log('Request body:', req.body);
+	const { donor_name } = req.body;
+	const donation_amount = parseFloat(req.body.donation_amount);
 
 	if (!donor_name || !donation_amount) {
 		res.status(400).json({ message: 'Invalid request' });
@@ -38,8 +37,20 @@ router.post('/stories/:story_id/donations', (req, res) => {
 			return;
 		}
 
-		newDonation.id = results.insertId;
-		res.status(201).send(newDonation);
+		connection.query(
+			'UPDATE stories SET current_amount = current_amount + ? WHERE id = ?',
+			[donation_amount, story_id],
+			(err, updateResults) => {
+				if (err) {
+					console.error(err);
+					res.status(500).json({ message: 'Server error!' });
+					return;
+				}
+
+				newDonation.id = results.insertId;
+				res.status(201).send(newDonation);
+			}
+		);
 	});
 });
 
