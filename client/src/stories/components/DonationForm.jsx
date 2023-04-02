@@ -65,7 +65,7 @@ const DonationForm = ({ storyId, onDonationSuccess }) => {
 					type='number'
 					label='Donation'
 					validators={[VALIDATOR_REQUIRE()]}
-					errorText='Please enter a valid data.'
+					errorText='Please enter a valid sum.'
 					onInput={inputHandler}
 				/>
 				<Button type='submit' disabled={!formState.isValid}>

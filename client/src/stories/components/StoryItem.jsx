@@ -97,7 +97,7 @@ const StoryItem = ({
 			<li className='story-item'>
 				<Card className='story-item__content'>
 					{isLoading && <LoadingSpinner asOverlay />}
-					<div onClick={navigateToStoryPage}>
+					<div className='story-item__link' onClick={navigateToStoryPage}>
 						<div className='story-item__image'>
 							<img
 								src={image ? `http://localhost:3003/${image}` : storyImg}

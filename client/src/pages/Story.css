@@ -1,5 +1,7 @@
+/* client\src\pages\Story.css */
 .storyPage-item {
 	margin: 1rem 0;
+	width: 100%;
 }
 
 .storyPage-item__content {

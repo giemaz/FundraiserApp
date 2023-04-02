@@ -54,6 +54,10 @@
 
 	justify-content: space-between;
 }
+
+.story-item__link:hover {
+	cursor: pointer;
+}
 .truncate-description {
 	position: relative;
 	height: 6em;

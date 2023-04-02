@@ -1,3 +1,4 @@
+/* client\src\index.css */
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap');
 
 * {
@@ -15,7 +16,9 @@ body {
 
 main {
 	display: flex;
-	justify-content: center;
+	flex-wrap: wrap;
+	flex-direction: row;
+	justify-content: space-around;
 	margin: 0 auto;
 	width: 90%;
 }
@@ -67,7 +70,7 @@ main {
 	list-style: none;
 	margin: 0 auto;
 	padding: 1rem;
-	width: 90%;
+	width: 100%;
 	max-width: 40rem;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
 	border-radius: 6px;

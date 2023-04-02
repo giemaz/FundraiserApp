@@ -58,7 +58,7 @@ const Story = () => {
 			<ErrorModal error={error} onClear={clearError} />
 			<Modal></Modal>
 
-			<li className='storyPage-item'>
+			<div className='storyPage-item'>
 				<Card className='storyPage-item__content'>
 					{isLoading && <LoadingSpinner asOverlay />}
 					<div className='storyPage-item__image'>
@@ -84,19 +84,21 @@ const Story = () => {
 					</div>
 					<div className='storyPage-item__actions'>
 						<div>{amountLeftToGoal}€ left to the goal</div>
-						<DonationForm storyId={id} onDonationSuccess={fetchStory} />
 					</div>
 				</Card>
-			</li>
-			<ul className='donationList'>
-				{donations.map((donation) => (
-					<Donation
-						key={donation.id}
-						donor_name={donation.donor_name}
-						donation_amount={donation.donation_amount}
-					/>
-				))}
-			</ul>
+			</div>
+			<div className='storyPage-item'>
+				<DonationForm storyId={id} onDonationSuccess={fetchStory} />
+				<ul className='story-form'>
+					{donations.map((donation) => (
+						<Donation
+							key={donation.id}
+							donor_name={donation.donor_name}
+							donation_amount={donation.donation_amount}
+						/>
+					))}
+				</ul>
+			</div>
 		</>
 	);
 };
