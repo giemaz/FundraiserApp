@@ -88,7 +88,11 @@ const Story = () => {
 				</Card>
 			</div>
 			<div className='storyPage-item'>
-				<DonationForm storyId={id} onDonationSuccess={fetchStory} />
+				<DonationForm
+					storyId={id}
+					onDonationSuccess={fetchStory}
+					isGoalReached={story.current_amount >= story.goal_amount}
+				/>
 				<ul className='story-form'>
 					{donations.map((donation) => (
 						<Donation

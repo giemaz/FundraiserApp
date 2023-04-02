@@ -9,7 +9,7 @@ import { VALIDATOR_REQUIRE } from '../../shared/util/validators';
 import { useForm } from '../../shared/hooks/form-hook';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 
-const DonationForm = ({ storyId, onDonationSuccess }) => {
+const DonationForm = ({ storyId, onDonationSuccess, isGoalReached }) => {
 	const { isLoading, error, sendRequest, clearError } = useHttpClient();
 	const [formState, inputHandler] = useForm(
 		{
@@ -68,7 +68,7 @@ const DonationForm = ({ storyId, onDonationSuccess }) => {
 					errorText='Please enter a valid sum.'
 					onInput={inputHandler}
 				/>
-				<Button type='submit' disabled={!formState.isValid}>
+				<Button type='submit' disabled={!formState.isValid || isGoalReached}>
 					DONATE
 				</Button>
 			</form>
