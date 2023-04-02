@@ -11,7 +11,15 @@ html {
 
 body {
 	margin: 0;
-	background: #4d4d4d;
+	background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url('./assets/moose.jpg');
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+html,
+body {
+	min-height: 100vh;
 }
 
 main {
@@ -74,7 +82,9 @@ main {
 	max-width: 40rem;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
 	border-radius: 6px;
-	background: white;
+	border: 2px solid white;
+	background: rgba(255, 255, 255, 0.486);
+	backdrop-filter: blur(10px);
 }
 @media (min-width: 1024px) {
 	main {

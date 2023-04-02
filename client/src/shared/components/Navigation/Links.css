@@ -18,15 +18,16 @@
 	border: 1px solid transparent;
 	color: #292929;
 	text-decoration: none;
+	font-weight: bold;
 	padding: 0.5rem;
 }
 
 .navLinks a:hover,
 .navLinks a:active,
 .navLinks a.active {
-	background: #f8df00;
-	border-color: #292929;
-	color: #292929;
+	background: #81a4d8;
+	border-color: #ffffff;
+	color: #ffffff;
 }
 
 .navLinks button {

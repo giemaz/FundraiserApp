@@ -6,6 +6,8 @@
 
 .storyPage-item__content {
 	padding: 0;
+	background: rgba(255, 255, 255, 0.486);
+	backdrop-filter: blur(10px);
 }
 
 .storyPage-item__info {

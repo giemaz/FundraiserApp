@@ -33,7 +33,7 @@ const Home = () => {
 			{!isLoading && (
 				<div className='story-container'>
 					<div className='title'>
-						<h1>Admin Page</h1>
+						<h1>Home Page</h1>
 					</div>
 					{!isLoading && loadedStories && <StoriesList items={loadedStories} showButtons={false} />}
 				</div>
