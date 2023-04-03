@@ -17,10 +17,8 @@ export const useHttpClient = () => {
 		try {
 			if (body && method !== 'GET' && method !== 'HEAD') {
 				if (body instanceof FormData) {
-					// Remove the 'Content-Type' header for FormData
 					delete headers['Content-Type'];
 				} else {
-					// Set the 'Content-Type' header for JSON
 					headers['Content-Type'] = 'application/json';
 					body = JSON.stringify(body);
 				}
