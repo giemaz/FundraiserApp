@@ -27,6 +27,7 @@
 .navLinks a.active {
 	background: #81a4d8;
 	border-color: #ffffff;
+	border-radius: 4px;
 	color: #ffffff;
 }
 
