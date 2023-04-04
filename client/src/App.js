@@ -11,7 +11,7 @@ import { AuthContext } from './shared/context/auth-context';
 import { useAuth } from './shared/hooks/auth-hook';
 
 const App = () => {
-	const { token, login, logout, userId, userType } = useAuth();
+	const { token, login, logout, userId, userType, username, image } = useAuth();
 
 	let routes;
 
@@ -45,6 +45,8 @@ const App = () => {
 				token: token,
 				userId: userId,
 				userType: userType,
+				username: username,
+				image: image,
 				login: login,
 				logout: logout,
 			}}>

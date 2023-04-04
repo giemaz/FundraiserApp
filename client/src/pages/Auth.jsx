@@ -75,7 +75,13 @@ const Auth = () => {
 						'Content-Type': 'application/json',
 					}
 				);
-				auth.login(responseData.userId, responseData.token, responseData.userType);
+				auth.login(
+					responseData.userId,
+					responseData.token,
+					responseData.userType,
+					responseData.username,
+					responseData.image
+				);
 			} catch (err) {}
 		} else {
 			try {

@@ -1,15 +1,26 @@
+/* client\src\shared\components\UIElements\Avatar.css */
 .avatar {
-  width: 100%;
-  height: 100%;
-  display: flex; 
-  justify-content: center;
-  align-items: center;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .avatar img {
-  display: block;
-  border-radius: 50%;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+	display: block;
+	border-radius: 50%;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+.username {
+	color: #ffffff;
+	margin-left: 5px;
+	margin-right: 10px;
+}
+.avatar-wrapper {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 }
