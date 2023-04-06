@@ -2,18 +2,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Card from '../shared/components/UIElements/Card';
 import { useParams } from 'react-router-dom';
-// import Button from '../shared/components/FormElements/Button';
 import Modal from '../shared/components/UIElements/Modal';
 import ErrorModal from '../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../shared/components/UIElements/LoadingSpinner';
 import ProgressBar from '../shared/components/UIElements/ProgressBar';
-
 import { useHttpClient } from '../shared/hooks/http-hook';
-
 import storyImg from '../assets/defaultStory.jpg';
-import './Story.css';
-import DonationForm from '../stories/components/DonationForm';
 import Donation from '../stories/components/Donation';
+import DonationForm from '../stories/components/DonationForm';
+import './Story.css';
 
 const Story = () => {
 	const { isLoading, error, sendRequest, clearError } = useHttpClient();

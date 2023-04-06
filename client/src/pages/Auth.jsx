@@ -10,12 +10,13 @@ import { useForm } from '../shared/hooks/form-hook';
 import { useHttpClient } from '../shared/hooks/http-hook';
 import { AuthContext } from '../shared/context/auth-context';
 import './Auth.css';
+import { useNavigate } from 'react-router-dom';
 
 const Auth = () => {
 	const auth = useContext(AuthContext);
 	const [isLoginMode, setIsLoginMode] = useState(true);
 	const { isLoading, error, sendRequest, clearError } = useHttpClient();
-
+	const navigate = useNavigate();
 	const [formState, inputHandler, setFormData] = useForm(
 		{
 			email: {
@@ -82,6 +83,11 @@ const Auth = () => {
 					responseData.username,
 					responseData.image
 				);
+				if (responseData.userType === 'admin') {
+					navigate('/admin');
+				} else {
+					navigate('/');
+				}
 			} catch (err) {}
 		} else {
 			try {
