@@ -1,5 +1,5 @@
 // client\src\stories\components\DonationForm.jsx
-import React from 'react';
+import React, { useState } from 'react';
 
 import Input from '../../shared/components/FormElements/Input';
 import Button from '../../shared/components/FormElements/Button';
@@ -8,9 +8,12 @@ import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import { VALIDATOR_REQUIRE } from '../../shared/util/validators';
 import { useForm } from '../../shared/hooks/form-hook';
 import { useHttpClient } from '../../shared/hooks/http-hook';
+import Modal from '../../shared/components/UIElements/Modal';
 
 const DonationForm = ({ storyId, onDonationSuccess, isGoalReached }) => {
 	const { isLoading, error, sendRequest, clearError } = useHttpClient();
+	const [showConfirmModal, setShowConfirmModal] = useState(false);
+
 	const [formState, inputHandler] = useForm(
 		{
 			donor_name: {
@@ -25,7 +28,20 @@ const DonationForm = ({ storyId, onDonationSuccess, isGoalReached }) => {
 		false
 	);
 
-	const placeSubmitHandler = async (event) => {
+	const showConfirmModalHandler = () => {
+		setShowConfirmModal(true);
+	};
+
+	const cancelConfirmModalHandler = () => {
+		setShowConfirmModal(false);
+	};
+
+	const donationSubmitHandler = (event) => {
+		event.preventDefault();
+		showConfirmModalHandler();
+	};
+
+	const confirmDonationHandler = async (event) => {
 		event.preventDefault();
 		try {
 			const donationData = {
@@ -42,13 +58,29 @@ const DonationForm = ({ storyId, onDonationSuccess, isGoalReached }) => {
 				}
 			);
 			onDonationSuccess();
+			cancelConfirmModalHandler();
 		} catch (err) {}
 	};
 
 	return (
 		<>
 			<ErrorModal error={error} onClear={clearError} />
-			<form className='story-form' onSubmit={placeSubmitHandler}>
+			<Modal
+				show={showConfirmModal}
+				onCancel={cancelConfirmModalHandler}
+				header='Confirm your donation'
+				footerClass='donation-form__modal-actions'
+				footer={
+					<>
+						<Button inverse onClick={cancelConfirmModalHandler}>
+							CANCEL
+						</Button>
+						<Button onClick={confirmDonationHandler}>DONATE</Button>
+					</>
+				}>
+				<p>Do you want to proceed and make this donation?</p>
+			</Modal>
+			<form className='story-form' onSubmit={donationSubmitHandler}>
 				{isLoading && <LoadingSpinner asOverlay />}
 				<Input
 					id='donor_name'
