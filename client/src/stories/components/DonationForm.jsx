@@ -5,7 +5,7 @@ import Input from '../../shared/components/FormElements/Input';
 import Button from '../../shared/components/FormElements/Button';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
-import { VALIDATOR_REQUIRE } from '../../shared/util/validators';
+import { VALIDATOR_REQUIRE, VALIDATOR_NUMBER, VALIDATOR_INTEGER, VALIDATOR_MIN } from '../../shared/util/validators';
 import { useForm } from '../../shared/hooks/form-hook';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import Modal from '../../shared/components/UIElements/Modal';
@@ -48,15 +48,9 @@ const DonationForm = ({ storyId, onDonationSuccess, isGoalReached }) => {
 				donor_name: formState.inputs.donor_name.value,
 				donation_amount: parseInt(formState.inputs.donation_amount.value, 10),
 			};
-			await sendRequest(
-				// `http://localhost:3003/test`,
-				`http://localhost:3003/stories/${storyId}/donations`,
-				'POST',
-				donationData,
-				{
-					'Content-Type': 'application/json',
-				}
-			);
+			await sendRequest(`http://localhost:3003/stories/${storyId}/donations`, 'POST', donationData, {
+				'Content-Type': 'application/json',
+			});
 			onDonationSuccess();
 			cancelConfirmModalHandler();
 		} catch (err) {}
@@ -96,7 +90,7 @@ const DonationForm = ({ storyId, onDonationSuccess, isGoalReached }) => {
 					element='input'
 					type='number'
 					label='Donation'
-					validators={[VALIDATOR_REQUIRE()]}
+					validators={[VALIDATOR_REQUIRE(), VALIDATOR_NUMBER(), VALIDATOR_INTEGER(), VALIDATOR_MIN(1)]}
 					errorText='Please enter a valid sum.'
 					onInput={inputHandler}
 				/>
