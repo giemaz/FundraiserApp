@@ -4,7 +4,7 @@
 
 This project is for educational purposes. Site published at: https://github.com/giemaz/FundraiserApp.git
 
-Design: [Moose] (fundraiser app Image by Freepik)
+Design: Image by Freepik
 
 ## 🎯 Project features/goals
 
